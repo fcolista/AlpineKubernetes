@@ -344,7 +344,23 @@ cd /etc/kubernetes
 rm *.csr
 rm *.srl
 ```
-Reboot:
+## Reboot the node and check kubernetes
 ```
 reboot
+```
+Login after the reboot and check kubernetes with kubectl:
+```
+ssh vagrant@kube01
+
+$ kubectl get cs
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS    MESSAGE             ERROR
+controller-manager   Healthy   ok                  
+scheduler            Healthy   ok                  
+etcd-0               Healthy   {"health":"true"}
+
+$ kubectl get nodes
+NAME     STATUS     ROLES    AGE     VERSION
+kube01   NotReady   <none>   4m13s   v1.19.4
+```
 ```
