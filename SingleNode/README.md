@@ -2,7 +2,8 @@
 
 ## Prerequists
 
-- A node (VM) with the latest Alpine Linux (3.12.1)
+- A node (VM) with the latest Alpine Linux (3.12.1) \
+  Here the node is created using Vagrant and [this Vagrantfile](Vagrantfile)
 - SSH and root (sudo) access to the node
 - The name of the node in an enviroment variable NODE_NAME
 - The ip of the node in an environment variable NODE_IP
@@ -12,8 +13,6 @@ Here we use:
 | NODE_NAME | NODE_IP       | NODE_NET        |
 |-----------|---------------|-----------------|
 | kube01    | 192.168.10.10 | 192.168.10.0/24 | 
-
-The node is created using Vagrant and [this Vagrantfile](Vagrantfile)
 
 ## Prepare the Node
 
@@ -445,4 +444,4 @@ EOF
 kubectl apply -f apiserver-clusterrole.yaml
 kubectl apply -f apiserver-clusterrole-binding.yaml
 ```
-## Install the kube-DNS 
+
