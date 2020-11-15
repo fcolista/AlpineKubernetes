@@ -292,3 +292,4 @@ EOF
 cd /etc/kubernetes
 rm *.csr
 rm *.srl
+
