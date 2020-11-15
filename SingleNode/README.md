@@ -12,6 +12,7 @@ Here we use:
 | NODE_NAME | NODE_IP       | NODE_NET        |
 |-----------|---------------|-----------------|
 | kube01    | 192.168.10.10 | 192.168.10.0/24 | 
+
 The node is created using Vagrant and [this Vagrantfile](Vagrantfile)
 
 ## Prepare the Node
@@ -400,7 +401,7 @@ FLANNEL_IPMASQ=true
 EOF
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-## Apply Cluster-role for api-server
+## Apply cluster-role for kube-apiserver allowing it to read logs, metrics etc.
 ```
 cat > apiserver-clusterrole-binding.yaml << EOF
 apiVersion: rbac.authorization.k8s.io/v1
@@ -441,3 +442,4 @@ EOF
 kubectl apply -f apiserver-clusterrole.yaml
 kubectl apply -f apiserver-clusterrole-binding.yaml
 ```
+## Install the kube-DNS 
