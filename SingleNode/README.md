@@ -309,9 +309,9 @@ EOF
 cat > /etc/conf.d/kubelet << EOF
 command_args="--config=/var/lib/kubelet/kubelet-config.yaml \
   --image-pull-progress-deadline=2m \
-  --kubeconfig=/etc/kubernetes/master.kubeconfig \
-  --tls-cert-file=/etc/kubernetes/master.crt \
-  --tls-private-key-file=/etc/kubernetes/master.key \
+  --kubeconfig=/etc/kubernetes/${NODE_NAME}.kubeconfig \
+  --tls-cert-file=/etc/kubernetes/${NODE_NAME}.crt \
+  --tls-private-key-file=/etc/kubernetes/${NODE_NAME}.key \
   --network-plugin=cni \
   --register-node=true \
   --container-runtime=remote \
