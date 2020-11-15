@@ -391,7 +391,7 @@ FLANNEL_MTU=1450
 FLANNEL_IPMASQ=true
 EOF
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-'''
+```
 ## Apply Cluster-role for api-server
 ```
 cat > apiserver-clusterrole-binding.yaml << EOF
