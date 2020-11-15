@@ -1,0 +1,16 @@
+cluster = [ { :name => "kube01", :ip => "192.168.10.10", :net => "kube.net" } ]
+
+Vagrant.configure("2") do |config|
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 2
+    vb.linked_clone = true
+ end
+ config.vm.box = "generic/Alpine312"
+ cluster.each do |node|
+    config.vm.define node[:name] do |config|
+    config.vm.hostname = node[:name]
+    config.vm.network "private_network", ip: node[:ip], netmask: "255.255.255.0", virtualbox_intnet: node[:net] 
+    end
+ end
+end
