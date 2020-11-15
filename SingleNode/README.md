@@ -17,7 +17,7 @@ Here we use:
 
 Login to the node a become root:
 ```
-ssh user@node
+ssh vagrant@kube01
 sudo su -
 ```
 Set the environment variables used in scripts:
