@@ -12,12 +12,13 @@ Here we use:
 | NODE_NAME | NODE_IP       | NODE_NET        |
 |-----------|---------------|-----------------|
 | kube01    | 192.168.10.10 | 192.168.10.0/24 | 
+The node is created using Vagrant and [this Vagrantfile](Vagrantfile)
 
 ## Prepare the Node
 
 Login to the node a become root:
 ```
-ssh vagrant@kube01
+vagrant ssh kube01
 sudo su -
 ```
 Set the environment variables used in scripts:
@@ -357,7 +358,7 @@ reboot
 ```
 Login after the reboot, check kubernetes with kubectl:
 ```
-ssh vagrant@kube01
+vagrant ssh kube01
 
 $ kubectl get --raw='/readyz?verbose'
 [+]ping ok
