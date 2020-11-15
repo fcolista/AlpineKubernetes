@@ -4,12 +4,27 @@
 
 A node (VM) with the latest Alpine Linux (3.12.1) with ssh and root (sudo) access
 
+The name of the node in an enviroment variable NODE_NAME
+The ip of the node in an environment variable NODE_IP
+The network/CIDR of the node in an environment variable NODE_NET
+
+Here we use:
+| NODE_NAME | NODE_IP       | NODE_NET        |
+|-----------|---------------|-----------------|
+| kube01    | 192.168.10.10 | 192.168.10.0/24 | 
+
 ## Prepare the Node
 
 Login to the node a become root:
 ```
 ssh user@node
 sudo su -
+```
+Set the environment variables used in scripts:
+```
+export NODE_NAME="kube01"
+export NODE_IP="192.168.10.10"
+export NODE_NET="192.168.10.0/24"
 ```
 Enable edge testing repositories:
 ```
