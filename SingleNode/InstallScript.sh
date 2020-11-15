@@ -1,6 +1,10 @@
 export NODE_NAME="kube01"
 export NODE_IP="192.168.10.10"
 export NODE_NET="192.168.10.0/24"
+cat > /etc/hosts << EOF
+127.0.0.1 localhost localhost.localdomain
+${NODE_IP} ${NODE_NAME}
+EOF
 cat >>/etc/apk/repositories << EOF
 http://nl.alpinelinux.org/alpine/edge/main
 http://nl.alpinelinux.org/alpine/edge/community
