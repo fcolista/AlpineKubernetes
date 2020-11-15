@@ -253,6 +253,9 @@ kubectl config set-context default \
     --user=system:node:${NODE_NAME} \
     --kubeconfig=${NODE_NAME}.kubeconfig
 kubectl config use-context default --kubeconfig=${NODE_NAME}.kubeconfig
+```
+## Configure the kubernetes deamons
+```
 cat > /etc/conf.d/kube-apiserver << EOF
 command_args="--advertise-address=${NODE_IP} \
   --allow-privileged=true \
