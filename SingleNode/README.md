@@ -348,7 +348,7 @@ rm *.srl
 ```
 reboot
 ```
-Login after the reboot and check kubernetes with kubectl:
+Login after the reboot, check kubernetes with kubectl:
 ```
 ssh vagrant@kube01
 
@@ -363,4 +363,14 @@ $ kubectl get nodes
 NAME     STATUS     ROLES    AGE     VERSION
 kube01   NotReady   <none>   4m13s   v1.19.4
 ```
+## Create a POD-network using Flannel
 ```
+sudo su -
+mkdir /run/flannel
+cat > /run/flannel/subnet.env << EOF
+FLANNEL_NETWORK=10.100.0.0/16
+FLANNEL_SUBNET=10.100.1.1/24
+FLANNEL_MTU=1450
+FLANNEL_IPMASQ=true
+EOF
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
