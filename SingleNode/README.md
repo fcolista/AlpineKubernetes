@@ -2,11 +2,11 @@
 
 ## Prerequists
 
-A node (VM) with the latest Alpine Linux (3.12.1) with ssh and root (sudo) access
-
-The name of the node in an enviroment variable NODE_NAME
-The ip of the node in an environment variable NODE_IP
-The network/CIDR of the node in an environment variable NODE_NET
+- A node (VM) with the latest Alpine Linux (3.12.1)
+- SSH and root (sudo) access to the node
+- The name of the node in an enviroment variable NODE_NAME
+- The ip of the node in an environment variable NODE_IP
+- The network/CIDR of the node in an environment variable NODE_NET
 
 Here we use:
 | NODE_NAME | NODE_IP       | NODE_NET        |
@@ -114,10 +114,10 @@ DNS.2 = kubernetes.default
 DNS.3 = kubernetes.default.svc
 DNS.4 = kubernetes.default.svc.cluster.local
 IP.1 = 10.96.0.1
-IP.2 = 192.168.10.10
+IP.2 = ${NODE_IP}
 IP.3 = 127.0.0.1
 EOF
-cat > openssl-master.cnf << EOF
+cat > openssl-${NODE_NAME}.cnf << EOF
 [req]
 req_extensions = v3_req
 distinguished_name = req_distinguished_name
@@ -127,8 +127,8 @@ basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = node
-IP.1 = 192.168.10.10
+DNS.1 = ${NODE_NAME}
+IP.1 = ${NODE_IP}
 EOF
 openssl genrsa -out ca.key 2048
 openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
@@ -145,9 +145,9 @@ openssl x509 -req -in kube-controller-manager.csr -CA ca.crt -CAkey ca.key -CAcr
 openssl genrsa -out kube-proxy.key 2048
 openssl req -new -key kube-proxy.key -subj "/CN=system:kube-proxy" -out kube-proxy.csr
 openssl x509 -req -in kube-proxy.csr -CA ca.crt -CAkey ca.key -CAcreateserial  -out kube-proxy.crt -days 10000
-openssl genrsa -out noder.key 2048
-openssl req -new -key master.key -subj "/CN=system:node:master/O=system:nodes" -out master.csr -config openssl-master.cnf
-openssl x509 -req -in master.csr -CA ca.crt -CAkey ca.key -CAcreateserial  -out master.crt -extensions v3_req -extfile openssl-master.cnf -days 10000
+openssl genrsa -out ${NODE_NAME}.key 2048
+openssl req -new -key ${NODE_NAME}.key -subj "/CN=system:node:${NODE_NAME}/O=system:nodes" -out ${NODE_NAME}.csr -config openssl-${NODE_NAME}.cnf
+openssl x509 -req -in ${NODE_NAME}.csr -CA ca.crt -CAkey ca.key -CAcreateserial  -out ${NODE_NAME}.crt -extensions v3_req -extfile openssl-${NODE_NAME}.cnf -days 10000
 openssl genrsa -out admin.key 2048
 openssl req -new -key admin.key -subj "/CN=admin/O=system:masters" -out admin.csr
 openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key -CAcreateserial  -out admin.crt -days 10000
@@ -216,7 +216,7 @@ kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconf
 kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://192.168.10.10:6443 \
+    --server=https://${NODE_IP}:6443 \
     --kubeconfig=kube-proxy.kubeconfig
 kubectl config set-credentials system:kube-proxy \
     --client-certificate=kube-proxy.crt \
@@ -231,20 +231,20 @@ kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
 kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.crt \
     --embed-certs=true \
-    --server=https://192.168.10.10:6443 \
-    --kubeconfig=master.kubeconfig
-kubectl config set-credentials system:node:master \
-    --client-certificate=master.crt \
-    --client-key=master.key \
+    --server=https://${NODE_IP}:6443 \
+    --kubeconfig=${NODE_NAME}.kubeconfig
+kubectl config set-credentials system:node:${NODE_NAME} \
+    --client-certificate=${NODE_NAME}.crt \
+    --client-key=${NODE_NAME}.key \
     --embed-certs=true \
-    --kubeconfig=master.kubeconfig
+    --kubeconfig=${NODE_NAME}.kubeconfig
 kubectl config set-context default \
     --cluster=kubernetes-the-hard-way \
-    --user=system:node:master \
-    --kubeconfig=master.kubeconfig
-kubectl config use-context default --kubeconfig=master.kubeconfig
+    --user=system:node:${NODE_NAME} \
+    --kubeconfig=${NODE_NAME}.kubeconfig
+kubectl config use-context default --kubeconfig=${NODE_NAME}.kubeconfig
 cat > /etc/conf.d/kube-apiserver << EOF
-command_args="--advertise-address=192.168.10.10 \
+command_args="--advertise-address=${NODE_IP} \
   --allow-privileged=true \
   --apiserver-count=2 \
   --audit-log-maxage=30 \
@@ -303,7 +303,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/etc/kubernetes/kube-proxy.kubeconfig"
 mode: "iptables"
-clusterCIDR: "192.168.10.0/24"
+clusterCIDR: "${NODE_NET}"
 EOF
 cat > /etc/conf.d/kubelet << EOF
 command_args="--config=/var/lib/kubelet/kubelet-config.yaml \
