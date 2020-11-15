@@ -99,7 +99,8 @@ rc-update add kubelet
 ```
 ## Make the kubernetes certs on this node:
 ```
-cat > /etc/kubernetes/openssl-apiserver.cnf << EOF
+cd /etc/kubernetes
+cat > openssl-apiserver.cnf << EOF
 [req]
 req_extensions = v3_req
 distinguished_name = req_distinguished_name
