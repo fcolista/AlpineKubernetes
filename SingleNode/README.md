@@ -26,6 +26,13 @@ export NODE_NAME="kube01"
 export NODE_IP="192.168.10.10"
 export NODE_NET="192.168.10.0/24"
 ```
+Create a clean /etc/hosts to avoid Certification issues:
+```
+cat > /etc/hosts << EOF
+127.0.0.1 localhost localhost.localdomain
+${NODE_IP} ${NODE_NAME}
+EOF
+```
 Enable edge testing repositories:
 ```
 cat >>/etc/apk/repositories << EOF
