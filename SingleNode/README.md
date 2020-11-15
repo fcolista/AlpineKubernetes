@@ -36,10 +36,12 @@ net.ipv4.ip_forward=1
 net.netfilter.nf_conntrack_tcp_be_liberal=1
 EOF
 ```
-Install containerd and Kubernetes base package:
+Add the packages for Containerd, ETCD and Kubernetes
 ```
 apk update
-apk add containerd kubernetes
+apk add containerd etcd etcd-ctl
+apk add kubernetes kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl
+apk add socat util-linux conntrack-tools nfs-utils findutils coreutils
 ```
 Containerd does not come with a init script, so create it:
 ```
@@ -62,19 +64,20 @@ depend() {
 }
 EOF
 chmod +x /etc/init.d/containerd
-rc-update add cgroups
-rc-update add containerd
 ```
-Add the kubernetes process that need to run on master and nodes
-
-```
-apk add kube-proxy kubelet
-apk add socat util-linux conntrack-tools nfs-utils findutils coreutils
-rc-update add kube-proxy 
-rc-update add kubele
-```
-Fix path of CNI needed by pod-network (weave):
+Copy the CNI plugins to a location where the pod-network and kubelet can vind them:
 ```
 mkdir -p /opt/cni/bin
 cp -a /usr/libexec/cni/. /opt/cni/bin
+```
+Active the deamons after a reboot:
+```
+rc-update add cgroups
+rc-update add containerd
+rc-update add etcd
+rc-update add kube-apiserver 
+rc-update add kube-controller-manager 
+rc-update add kube-scheduler
+rc-update add kube-proxy 
+rc-update add kubelet
 ```
