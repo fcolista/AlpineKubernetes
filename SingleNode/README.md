@@ -453,4 +453,8 @@ EOF
 kubectl apply -f apiserver-clusterrole.yaml
 kubectl apply -f apiserver-clusterrole-binding.yaml
 ```
+## Add the kube-dns service using dns-coredns.yaml 
+```
+kubectl apply -f https://raw.githubusercontent.com/alainvanhoof/AlpineKubernetes/main/SingleNode/dns-coredns.yml
+```
 
