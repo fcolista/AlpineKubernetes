@@ -403,7 +403,7 @@ FLANNEL_IPMASQ=true
 EOF
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-Check to see if the noetwork is up and the Flannel POD is running:
+Check to see if the network is up and the Flannel POD is running:
 ```
 kube01:~# kubectl get nodes
 NAME     STATUS   ROLES    AGE     VERSION
