@@ -363,7 +363,7 @@ Login after the reboot, check kubernetes with kubectl:
 ```
 vagrant ssh kube01
 
-$ kubectl get --raw='/readyz?verbose'
+kube01$ kubectl get --raw='/readyz?verbose'
 [+]ping ok
 [+]log ok
 [+]etcd ok
@@ -387,7 +387,7 @@ $ kubectl get --raw='/readyz?verbose'
 [+]shutdown ok
 healthz check passed
 
-$ kubectl get nodes
+kube01:$ kubectl get nodes
 NAME     STATUS     ROLES    AGE     VERSION
 kube01   NotReady   <none>   4m13s   v1.19.4
 ```
@@ -402,6 +402,15 @@ FLANNEL_MTU=1450
 FLANNEL_IPMASQ=true
 EOF
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+Check to see if the noetwork is up and the Flannel POD is running:
+```
+kube01:~# kubectl get nodes
+NAME     STATUS   ROLES    AGE     VERSION
+kube01   Ready    <none>   4m50s   v1.19.4
+kube01:~# kubectl get pods -A
+NAMESPACE     NAME                    READY   STATUS    RESTARTS   AGE
+kube-system   kube-flannel-ds-2rh2v   1/1     Running   0          33s
 ```
 ## Apply cluster-role for kube-apiserver allowing it to read logs, metrics etc.
 ```
