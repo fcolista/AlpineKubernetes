@@ -277,6 +277,8 @@ command_args="--advertise-address=${NODE_IP} \
   --kubelet-client-key=/etc/kubernetes/kube-apiserver.key \
   --kubelet-https=true \
   --runtime-config=api/all=true \
+  --service-account-signing-key-file=/etc/kubernetes/service-account.key \
+  --service-account-issuer=https://127.0.0.1:6443 \
   --service-account-key-file=/etc/kubernetes/service-account.crt \
   --service-cluster-ip-range=10.96.0.0/24 \
   --service-node-port-range=30000-32767 \
