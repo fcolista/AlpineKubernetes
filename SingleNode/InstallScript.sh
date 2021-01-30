@@ -19,7 +19,7 @@ net.netfilter.nf_conntrack_tcp_be_liberal=1
 EOF
 apk update
 apk upgrade
-apk add containerd etcd etcd-ctl
+apk add containerd cni-plugins etcd etcd-ctl
 apk add kubernetes kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl
 apk add socat util-linux conntrack-tools nfs-utils findutils coreutils openssl
 mkdir -p /etc/containerd
