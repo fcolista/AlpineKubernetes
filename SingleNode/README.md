@@ -364,8 +364,9 @@ reboot
 Login after the reboot, check kubernetes with kubectl:
 ```
 vagrant ssh kube01
-
-kube01$ kubectl get --raw='/readyz?verbose'
+kube01$ sudo su -
+kube01# export KUBECONFIG=/etc/kubernetes/admin.kubeconfig
+kube01# kubectl get --raw='/readyz?verbose'
 [+]ping ok
 [+]log ok
 [+]etcd ok
